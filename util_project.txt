@@ -1,0 +1,17 @@
+#instalação necessária pip manualmente
+pip install django
+
+#permitir execução de Scripts no Windows (abrir PowerShell em modo administrador)
+Type Set-ExecutionPolicy RemoteSigned
+
+#criar env
+py -m venv env
+
+#iniciar venv
+env/Scripts/activate
+
+#iniciar server
+python manage.py runserver 8000
+
+#desativar venv
+deactivate
