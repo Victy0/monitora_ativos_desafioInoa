@@ -13,7 +13,7 @@
                     {{ error }}
                 </p>
             {% endif %}
-            <form id="create-user-form" method="post" action="{% url 'create-user' %}">
+            <form id="create-user-form" method="post" action="{% url 'create-user' %}" autocomplete="off">
                 {% csrf_token %}
                 <div class="form-group mb-3 form-custom">
                     <label for="user_name">Nome*:</label>
@@ -55,7 +55,7 @@
                     />
                 </div>
                 <button type="button" class="btn btn-danger" onclick="location.href = '/'">Cancelar</button>
-                <button type="submit" class="btn btn-primary" onclick="return validateCreateUser()">Cadastrar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
             </form>
         </div>
     </div>

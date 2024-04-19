@@ -4,6 +4,14 @@
 
 {% block content %}
 
+
 <h1>Interface de Listagem de ativos</h1>
+
+{% if user %}
+    <script>
+        localStorage.setItem("userMA", '{{user}}');
+        console.log(localStorage.getItem("userMA"));
+    </script>
+{% endif %}
 
 {% endblock content %}
