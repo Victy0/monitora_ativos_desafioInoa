@@ -1,0 +1,64 @@
+{% extends "base.html" %} 
+
+{% block title%} Monitora Ativos - Cadastro novo usuário {%endblock%}
+
+{% block content %}
+
+<div class="container-fluid min-vh-100 container-page">
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+            <h1 class="mb-2">Cadastro novo usuário</h1>
+            {% if error %}
+                <p class="mb-4 error-message">
+                    {{ error }}
+                </p>
+            {% endif %}
+            <form id="create-user-form" method="post" action="{% url 'create-user' %}">
+                {% csrf_token %}
+                <div class="form-group mb-3 form-custom">
+                    <label for="user_name">Nome*:</label>
+                    <input
+                        type="text"
+                        name="user_name"
+                        id="user_name"
+                        class="form-control mt-2"
+                        {% if form.user_name.value != None %}
+                            value={{ form.user_name.value }}
+                        {% endif %}
+                        required
+                    />
+                </div>
+                <div class="form-group mb-3 form-custom">
+                    <label for="email">E-mail*:</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        class="form-control mt-2"
+                        {% if form.email.value != None %}
+                            value={{ form.email.value }}
+                        {% endif %}
+                        required
+                    />
+                </div>
+                <div class="form-group mb-3 form-custom">
+                    <label for="password">Senha*:</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="form-control mt-2"
+                        {% if form.password.value != None %}
+                            value={{ form.password.value }}
+                        {% endif %}
+                        required
+                    />
+                </div>
+                <button type="button" class="btn btn-danger" onclick="location.href = '/'">Cancelar</button>
+                <button type="submit" class="btn btn-primary" onclick="return validateCreateUser()">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
