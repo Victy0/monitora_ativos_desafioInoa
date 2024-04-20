@@ -4,12 +4,6 @@
 
 {% block content %}
 
-{% if request.clear %}
-    <script>
-        localStorage.removeItem("userMA");
-    </script>
-{% endif %}
-
 <div class="container-fluid min-vh-100 container-page">
     <div class="row justify-content-center">
         <div class="col-sm-6">
@@ -41,7 +35,7 @@
                         required
                     />
                 </div>
-                <button type="submit" class="btn btn-primary" onclick="return validateCreateUser()">Entrar</button>
+                <button type="submit" class="btn btn-primary">Entrar</button>
             </form>
             <button type="button" class="btn btn-link" onclick="location.href = 'create-user/'">Novo por aqui? Cadastre-se</button>
         </div>

@@ -19,7 +19,11 @@
                 </p>
             {% endif %}
 
-            <form id="create-user-form" method="post" action="{% url 'create-user' %}" autocomplete="off">
+            {% if edit %}
+                <form id="edit-user-form" method="post" action="{% url 'edit-user' %}" autocomplete="off">
+            {% else %}
+                <form id="create-user-form" method="post" action="{% url 'create-user' %}" autocomplete="off">
+            {% endif %}            
                 {% csrf_token %}
                 <div class="form-group mb-3 form-custom">
                     <label for="user_name">Nome*:</label>
