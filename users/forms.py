@@ -6,7 +6,7 @@ from django.utils import timezone
 from .models import User
 
 
-class CreateUserForm(forms.ModelForm):
+class UserForm(forms.ModelForm):
     
     class Meta:
         model = User
@@ -26,7 +26,7 @@ class CreateUserForm(forms.ModelForm):
             if not email_pattern.match(email):
                 return "Padrão de e-mail inválido!"
         if password is None:
-            return "Senha precisa ser preenchido!"
+            return "Senha precisa ser preenchida!"
         
         if User.objects.filter(email=email).exists() and not is_edition:
             return "E-mail já cadastrado!"
@@ -41,7 +41,7 @@ class CreateUserForm(forms.ModelForm):
         if email is None:
             return "E-mail precisa ser preenchido!", id_user
         if password is None:
-            return "Senha precisa ser preenchido!", id_user
+            return "Senha precisa ser preenchida!", id_user
         
         try:
             user_in_db = User.objects.get(email=email)
@@ -52,7 +52,7 @@ class CreateUserForm(forms.ModelForm):
             return "E-mail não cadastrado!", id_user
         
         if User.decode_field_str(user_in_db.password) != password:
-            return "E-mail ou senha incorreta!", id_user
+            return "E-mail ou senha informado incorreto!", id_user
         
         id_user = user_in_db.id_user
         user_in_db.last_login = timezone.now().isoformat()

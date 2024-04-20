@@ -1,13 +1,13 @@
 
 from django.shortcuts import render, redirect
 
-from .forms import CreateUserForm
+from .forms import UserForm
 
 from .models import User
 
 def login(request):
     if request.method == 'POST':
-        loginForm = CreateUserForm(request.POST)
+        loginForm = UserForm(request.POST)
         
         errorMessage, id_user = loginForm.validate_login()
         if errorMessage is not None:
@@ -19,11 +19,12 @@ def login(request):
     return render(request, 'login/login.html')
 
 def logout(request):
+    del request.session['id_user']
     return render(request, 'login/login.html')
 
 def create_user(request):
     if request.method == 'POST':
-        userForm = CreateUserForm(request.POST)
+        userForm = UserForm(request.POST)
         
         id_user = None
         if 'id_user' in request.session:
@@ -45,12 +46,14 @@ def create_user(request):
                 user = userForm.save(commit=False)
                 user.password = User.encode_field_str(user.password)
                 user.save()
+                
+                request.session['id_user'] = id_user
             else:
                 return render(request, 'user/createUser.html', {'form': userForm, 'error': 'Erro inesperado ao cadastrar usuário!'})
         
         return redirect('stock-list')
     else:
-        userForm = CreateUserForm()
+        userForm = UserForm()
         return render(request, 'user/createUser.html', {'form': userForm})
     
 def edit_user(request):
@@ -58,7 +61,7 @@ def edit_user(request):
     id_user = int(User.decode_field_str(id_user_str))
     
     user = User.objects.get(id_user=id_user)
-    userForm = CreateUserForm(user)
+    userForm = UserForm(user)
     return render(request, 'user/createUser.html', {'form': userForm, 'edit': True})
 
 def stock_list(request):
