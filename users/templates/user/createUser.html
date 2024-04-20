@@ -1,18 +1,24 @@
 {% extends "base.html" %} 
 
-{% block title%} Monitora Ativos - Cadastro novo usuário {%endblock%}
+{% block title%} Monitora Ativos - Usuário {%endblock%}
 
 {% block content %}
 
 <div class="container-fluid min-vh-100 container-page">
     <div class="row justify-content-center">
         <div class="col-sm-6">
-            <h1 class="mb-2">Cadastro novo usuário</h1>
+            {% if edit %}
+                <h1 class="mb-2">Edição de usuário</h1>
+            {% else %}
+                <h1 class="mb-2">Cadastro novo usuário</h1>
+            {% endif %}
+
             {% if error %}
                 <p class="mb-4 error-message">
                     {{ error }}
                 </p>
             {% endif %}
+
             <form id="create-user-form" method="post" action="{% url 'create-user' %}" autocomplete="off">
                 {% csrf_token %}
                 <div class="form-group mb-3 form-custom">
@@ -22,8 +28,8 @@
                         name="user_name"
                         id="user_name"
                         class="form-control mt-2"
-                        {% if form.user_name.value != None %}
-                            value={{ form.user_name.value }}
+                        {% if form.data.user_name != None %}
+                            value={{ form.data.user_name }}
                         {% endif %}
                         required
                     />
@@ -35,8 +41,8 @@
                         name="email"
                         id="email"
                         class="form-control mt-2"
-                        {% if form.email.value != None %}
-                            value={{ form.email.value }}
+                        {% if form.data.email != None %}
+                            value={{ form.data.email }}
                         {% endif %}
                         required
                     />
@@ -48,14 +54,21 @@
                         name="password"
                         id="password"
                         class="form-control mt-2"
-                        {% if form.password.value != None %}
-                            value={{ form.password.value }}
+                        {% if form.data.password != None and not edit%}
+                            value={{ form.data.password }}
                         {% endif %}
                         required
                     />
                 </div>
-                <button type="button" class="btn btn-danger" onclick="location.href = '/'">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
+
+                {% if edit %}
+                    <button type="button" class="btn btn-danger" disabled>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Editar</button>
+                {% else %}
+                    <button type="button" class="btn btn-danger" onclick="location.href = '/'">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                {% endif %}
+                
             </form>
         </div>
     </div>

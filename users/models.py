@@ -15,7 +15,7 @@ class User(models.Model):
     last_login = models.DateTimeField(_("data de último login do usuário no sistema"), null=True)
     
     class Meta:
-        db_table = "user"
+        db_table = "user_app"
         
     def __str__(self):
         return self.email

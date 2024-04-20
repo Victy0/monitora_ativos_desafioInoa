@@ -12,7 +12,7 @@ class CreateUserForm(forms.ModelForm):
         model = User
         fields = ('user_name','email','password')
     
-    def validate_fields(self):
+    def validate_fields(self, is_edition):
         user_name = self.data['user_name']
         email = self.data['email']
         password = self.data['password']
@@ -28,7 +28,7 @@ class CreateUserForm(forms.ModelForm):
         if password is None:
             return "Senha precisa ser preenchido!"
         
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exists() and not is_edition:
             return "E-mail já cadastrado!"
         
         return None
