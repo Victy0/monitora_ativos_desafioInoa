@@ -5,6 +5,7 @@ from .forms import UserForm
 
 from .models import User
 
+
 def login(request):
     if request.method == 'POST':
         loginForm = UserForm(request.POST)

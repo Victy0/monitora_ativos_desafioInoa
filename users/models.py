@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+
 class User(models.Model):
     id_user = models.AutoField(_("identificador do registro de usuário"), primary_key=True)
     user_name = models.CharField(_("nome do usuário"), max_length=50)
