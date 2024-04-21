@@ -12,6 +12,7 @@ class Stock(models.Model):
     acronym = models.CharField(_("sigla do ativo"), max_length=10, unique=True)
     sector = models.CharField(_("setor de operação do ativo"), max_length=100, null=True)
     is_brazilian = models.BooleanField(_("indicativo se ativo é brasileiro"), default=True)
+    creation_date = models.DateTimeField(_("data de criação do registro de usuário no sistema"), default=timezone.now)
     
     class Meta:
         db_table = "stock"

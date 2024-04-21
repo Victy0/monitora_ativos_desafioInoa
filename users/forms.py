@@ -28,8 +28,9 @@ class UserForm(forms.ModelForm):
         if password is None:
             return "Senha precisa ser preenchida!"
         
-        if User.objects.filter(email=email).exists() and not is_edition:
-            return "E-mail já cadastrado!"
+        if not is_edition:
+            if User.objects.filter(email=email).exists():
+                return "E-mail já cadastrado!"
         
         return None
     

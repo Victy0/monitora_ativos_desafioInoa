@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
                 ('acronym', models.CharField(max_length=10, unique=True, verbose_name='sigla do ativo')),
                 ('sector', models.CharField(max_length=100, null=True, verbose_name='setor de operação do ativo')),
                 ('is_brazilian', models.BooleanField(default=True, verbose_name='indicativo se ativo é brasileiro')),
+                ('creation_date', models.DateTimeField(default=django.utils.timezone.now, verbose_name='data de criação do registro de ativo no sistema')),
             ],
             options={
                 'db_table': 'stock',

@@ -1,0 +1,137 @@
+{% extends "base.html" %} 
+
+{% block title%} Monitora Ativos - Cadastro de ativo {%endblock%}
+
+{% block content %}
+
+<div class="container-fluid min-vh-100 container-page">
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+        {% if edit %}
+            <h1 class="mb-2">Edição de ativo</h1>
+        {% else %}
+            <h1 class="mb-2">Cadastro de ativo</h1>
+        {% endif %}
+
+        {% if error %}
+            <p class="mb-4 error-message">
+                {{ error }}
+            </p>
+        {% endif %}
+
+        {% if new %}
+            <form id="search-stock-form" method="post" action="{% url 'search-stock' %}" autocomplete="off">
+                {% csrf_token %}
+        {% endif %}
+
+                <div class="form-group mb-3 form-custom">
+                    <div class="form-input-inline">
+                        <label for="acronym">Sigla*:</label>
+                        <input
+                            type="text"
+                            name="acronym"
+                            id="acronym"
+                            class="form-control mt-2"
+                        {% if new %}
+                            {% if form.data.acronym != None %}
+                                value={{ form.data.acronym }}
+                            {% endif %}
+                            required
+                        {% else %}
+                            {% if stock.acronym != None %}
+                                value={{ stock.acronym }}
+                            {% endif %}
+                            disabled
+                        {% endif %}
+                        />
+                    </div>
+                    <div class="form-check form-checkbox-inline">
+                        <input
+                            type="checkbox"
+                            name="is_brazilian"
+                            id="is_brazilian"
+                            class="form-check-input"
+                        {% if new %}
+                            {% if form.data.is_brazilian != None %}
+                                {% if form.data.is_brazilian %}checked="checked"{% endif %}
+                            {% else %}
+                                checked="checked"
+                            {% endif %}
+                        {% else %}
+                            {% if stock.is_brazilian != None %}
+                                {% if stock.is_brazilian %}
+                                    checked="checked"
+                                {% endif %}
+                            {% endif %}
+                            disabled
+                        {% endif %}
+                        />
+                        <label class="form-check-label" for="is_brazilian">Ativo brasileiro</label>
+                    </div>
+                </div>
+
+        {% if new %}
+                <button type="submit" class="btn btn-primary">Pesquisar</button>
+            </form>
+        {% endif %}
+
+    {% if new == None %}
+        {% if edit %}
+            <form id="edit-stock-form" method="post" action="{% url 'edit-stock' %}" autocomplete="off">
+        {% else %}
+            <form id="create-user-stock-form" method="post" action="{% url 'create-stock' %}" autocomplete="off">
+        {% endif %}            
+                {% csrf_token %}
+                <div class="form-group mb-3 form-custom">
+                    <label for="user_name">Nome*:</label>
+                    <input
+                        type="text"
+                        name="user_name"
+                        id="user_name"
+                        class="form-control mt-2"
+                    {% if form.data.user_name != None %}
+                        value={{ form.data.user_name }}
+                    {% endif %}
+                        required
+                    />
+                </div>
+                <div class="form-group mb-3 form-custom">
+                    <label for="email">E-mail*:</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        class="form-control mt-2"
+                    {% if form.data.email != None %}
+                        value={{ form.data.email }}
+                    {% endif %}
+                        required
+                    />
+                </div>
+                <div class="form-group mb-3 form-custom">
+                    <label for="password">Senha*:</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="form-control mt-2"
+                    {% if form.data.password != None and not edit%}
+                        value={{ form.data.password }}
+                    {% endif %}
+                        required
+                    />
+                </div>
+
+                <button type="button" class="btn btn-danger" onclick="location.href = 'stock/'">Cancelar</button>
+            {% if edit %}
+                <button type="submit" class="btn btn-primary">Editar</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            {% endif %}
+            </form>
+    {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
