@@ -63,7 +63,7 @@
             </div>
 
         {% if edit %}
-            <button type="button" class="btn btn-danger" disabled>Cancelar</button>
+            <a href="{% url 'stock-list' %}" class="btn btn-danger">Cancelar</a>
             <button type="submit" class="btn btn-primary">Editar</button>
         </form>
         {% else %}

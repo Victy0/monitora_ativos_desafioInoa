@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('max_price', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='valor máximo do túnel estático definido pelo usuário')),
                 ('min_price', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='valor mínimo do túnel estático definido pelo usuário')),
-                ('update_frequency', models.CharField(max_length=20, verbose_name='frequencia em minutos de atualização dos dados do ativo definido pelo usuário')),
+                ('update_frequency', models.IntegerField(max_length=20, verbose_name='frequencia em minutos de atualização dos dados do ativo definido pelo usuário')),
                 ('id_stock', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stocks.stock')),
                 ('id_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
             ],

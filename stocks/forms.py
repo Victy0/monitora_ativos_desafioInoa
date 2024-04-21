@@ -1,6 +1,7 @@
 from django import forms
 
 from stocks.models import Stock, UserStock
+from stocks.tasks import get_stock_info
 
 class StockForm(forms.ModelForm):
     
@@ -9,7 +10,9 @@ class StockForm(forms.ModelForm):
         fields = ('acronym', 'is_brazilian')
         
     def search_stock(self):
-        acronym = self.data['acronym']
+        acronym = self.data['acronym'].upper()
+        is_brazilian = True
+        
         try:
             stock_db = Stock.objects.get(acronym=acronym)
         except Stock.DoesNotExist:
@@ -17,9 +20,17 @@ class StockForm(forms.ModelForm):
             
         if stock_db is not None:
             return None, stock_db
+
+        stock_name = get_stock_info(acronym, is_brazilian)
+        if stock_name is None:
+            return "Ativo não encontrado!", stock_name
         
-        # Procurar se ativo existe pela API
-        return "Consumo da API não implementado!", stock_db
+        stock = Stock()
+        stock.acronym = acronym
+        stock.is_brazilian = True
+        stock.name = stock_name
+        
+        return None, stock
 
 class UserStockForm(forms.ModelForm):
     

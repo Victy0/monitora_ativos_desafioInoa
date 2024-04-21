@@ -24,7 +24,9 @@ def search_stock(request):
     error_message, stock = stock_form.search_stock()
     
     if error_message is not None:
-        return render(request, 'user/createUser.html', {'form': stock_form, 'new': True, 'error': error_message})
+        return render(request, 'stock/createStock.html', {'form': stock_form, 'new': True, 'error': error_message})
     
+    request.session['stock'] = stock.serialize_stock_for_create()
     user_stock_form = StockForm(request.POST)
-    return render(request, 'stock/createStock.html', {'stock': stock, 'form': user_stock_form})
+    options_update_frequency = UserStock.get_options_to_update_frequency()
+    return render(request, 'stock/createStock.html', {'stock': stock, 'form': user_stock_form, 'options_update': options_update_frequency})

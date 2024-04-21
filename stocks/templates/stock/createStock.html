@@ -23,7 +23,7 @@
 
             <div class="form-group mb-3 form-custom">
                 <div class="form-input-inline">
-                    <label for="acronym">Sigla*:</label>
+                    <label for="acronym">Sigla:</label>
                     <input
                         type="text"
                         name="acronym"
@@ -60,66 +60,96 @@
                                 checked="checked"
                             {% endif %}
                         {% endif %}
-                        disabled
                     {% endif %}
+                        disabled
                     />
                     <label class="form-check-label" for="is_brazilian">Ativo brasileiro</label>
                 </div>
             </div>
 
     {% if new %}
+            <a href="{% url 'stock-list' %}" class="btn btn-danger">Cancelar</a>
             <button type="submit" class="btn btn-primary">Pesquisar</button>
         </form>
     {% endif %}
 
     {% if new == None %}
+            <div class="form-group mb-3 form-custom form-bottom-border">
+                <label for="name">Nome:</label>
+                <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    class="form-control mt-2"
+                {% if stock.name != None %}
+                    value={{ stock.name }}
+                {% endif %}
+                    disabled
+                />
+            </div>
         {% if edit %}
             <form id="edit-stock-form" method="post" action="{% url 'edit-stock' %}" autocomplete="off">
         {% else %}
             <form id="create-user-stock-form" method="post" action="{% url 'create-stock' %}" autocomplete="off">
         {% endif %}            
                 {% csrf_token %}
+
                 <div class="form-group mb-3 form-custom">
-                    <label for="user_name">Nome*:</label>
-                    <input
-                        type="text"
-                        name="user_name"
-                        id="user_name"
-                        class="form-control mt-2"
-                    {% if form.data.user_name != None %}
-                        value={{ form.data.user_name }}
-                    {% endif %}
-                        required
-                    />
-                </div>
-                <div class="form-group mb-3 form-custom">
-                    <label for="email">E-mail*:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        class="form-control mt-2"
-                    {% if form.data.email != None %}
-                        value={{ form.data.email }}
-                    {% endif %}
-                        required
-                    />
-                </div>
-                <div class="form-group mb-3 form-custom">
-                    <label for="password">Senha*:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        class="form-control mt-2"
-                    {% if form.data.password != None and not edit%}
-                        value={{ form.data.password }}
-                    {% endif %}
-                        required
-                    />
+                    <div class="form-input-inline">
+                        <label for="max_price">Valor Máximo (R$)*:</label>
+                        <input
+                            type="number"
+                            min="0.00"
+                            onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
+                            name="max_price"
+                            id="max_price"
+                            class="form-control mt-2"
+                        {% if form.data.max_price != 0 %}
+                            value={{ form.data.max_price }}
+                        {% endif %}
+                            required
+                        />
+                    </div>
+                    <div class="form-input-inline">
+                        <label for="min_price">Valor Mínimo (R$)*:</label>
+                        <input
+                            type="number"
+                            min="0.00"
+                            onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
+                            name="min_price"
+                            id="min_price"
+                            class="form-control mt-2"
+                        {% if form.data.min_price != 0 %}
+                            value={{ form.data.min_price }}
+                        {% endif %}
+                            required
+                        />
+                    </div>
                 </div>
 
-                <button type="button" class="btn btn-danger" onclick="location.href = 'stock/'">Cancelar</button>
+                <div class="form-group mb-3 form-custom">
+                    <label for="update_frequency">Periodicidade de verificação de cotação (min)*:</label>
+                    <select
+                        id="update_frequency"
+                        name="update_frequency"
+                        class="form-control form-select2"
+                        required
+                    >
+                        <option value="">Selecione uma opção</option>
+                    {% for option in options_update %}
+                        <option 
+                            value="{{ option }}"
+                            {% if form.data.update_frequency != None and form.data.update_frequency == option %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ option }}
+                        </option>
+                    {% endfor %}
+                    </select>
+                </div>
+
+                <a href="{% url 'stock-list' %}" class="btn btn-danger">Cancelar</a>
             {% if edit %}
                 <button type="submit" class="btn btn-primary">Editar</button>
             {% else %}

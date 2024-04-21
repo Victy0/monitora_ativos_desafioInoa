@@ -2,20 +2,17 @@
 html, body
 {
     position: fixed; 
-    width: 100%; 
-    height: 100%; 
+    width: 100%;
+    height: 90%;
     top: 0; 
     left: 0;
     margin: 0;
     position: absolute;
-    overflow: hidden;
     background-color: rgb(194, 194, 194);
 }
 .container-base
 {
-    padding: 5vh;
-    height: 100vw;
-    width: 100vw;
+    padding: 1em;
 }
 .container-page
 {
@@ -29,6 +26,15 @@ html, body
     position: relative;
     display: flex;
     text-align: center;
+}
+.row
+{
+    overflow-y: auto !important;
+    padding-bottom: 2em !important;
+}
+.min-vh-95
+{
+    min-height: 95vh !important;
 }
 
 /*** navbar ***/
@@ -84,4 +90,9 @@ html, body
     display: inline-block !important;
     width: 40%;
     margin-left:3em;
+}
+.form-bottom-border
+{
+    padding-bottom: 2em;
+    border-bottom: 3px solid black;
 }

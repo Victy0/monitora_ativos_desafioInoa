@@ -20,18 +20,29 @@ class Stock(models.Model):
     def __str__(self):
         return self.name + '(' + self.acronym + ')'
     
+    def serialize_stock_for_create(self):
+        return {
+            'id_stock': self.id_stock,
+            'name': self.name,
+            'acronym': self.acronym,
+            'is_brazilian': self.is_brazilian
+        }
+    
 class UserStock(models.Model):
     id_user = models.ForeignKey(User, on_delete=models.CASCADE)
     id_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    max_price = models.DecimalField(_("valor máximo do túnel estático definido pelo usuário"), max_digits=10, decimal_places=2)
-    min_price = models.DecimalField(_("valor mínimo do túnel estático definido pelo usuário"), max_digits=10, decimal_places=2)
-    update_frequency = models.CharField(_("frequencia em minutos de atualização dos dados do ativo definido pelo usuário"), max_length=20)
+    max_price = models.DecimalField(_("valor máximo do túnel estático definido pelo usuário"), max_digits=10, decimal_places=2, default=0)
+    min_price = models.DecimalField(_("valor mínimo do túnel estático definido pelo usuário"), max_digits=10, decimal_places=2, default=0)
+    update_frequency = models.IntegerField(_("frequencia em minutos de atualização dos dados do ativo definido pelo usuário"), default=0)
     
     class Meta:
         db_table = "user_stock"
         
     def __str__(self):
         return '(Usuário: ' + str(self.id_user) + '; Ativo: ' + str(self.id_stock) + ')'
+    
+    def get_options_to_update_frequency():
+        return [1, 5, 15, 30, 60]
     
 class StockHistory(models.Model):
     id_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
