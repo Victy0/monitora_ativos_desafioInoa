@@ -1,3 +1,4 @@
+/*** base ****/
 html, body
 {
     position: fixed; 
@@ -22,7 +23,6 @@ html, body
     border-radius: 1em;
     padding-top: 2em;
 }
-
 .container-template
 {
     width: 100%;
@@ -31,6 +31,33 @@ html, body
     text-align: center;
 }
 
+/*** navbar ***/
+.navbar
+{
+    padding-left: 2em !important;
+    padding-right: 2em !important;
+    margin-bottom: 2em;
+    margin-top: -1em;
+    border-radius: 1em;
+}
+.navbar-brand
+{
+    font-weight: bold;
+    padding-right: 1em;
+    border-right: 3px solid white;
+}
+.nav-item
+{
+    font-weight: bold;
+}
+.nav-link
+{
+    color: rgb(255, 255, 255);
+    font-size: 1.1em;
+    margin-right: 1em;
+}
+
+/*** error message ***/
 .error-message
 {
     background-color: rgb(252, 45, 45);
@@ -39,13 +66,14 @@ html, body
     padding: 0.5em;
     font-weight: 600;
 }
+
+/*** custom form ***/
 .form-custom label
 {
     display: block !important;
     font-weight: 600;
     text-align: left;
 }
-
 .form-input-inline
 {
     display: inline-block !important;

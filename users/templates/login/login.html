@@ -4,43 +4,36 @@
 
 {% block content %}
 
-<div class="container-fluid min-vh-100 container-page">
-    <div class="row justify-content-center">
-        <div class="col-sm-6">
-            <h1 class="mb-2">Login</h1>
-            {% if error %}
-                <p class="mb-4 error-message">
-                    {{ error }}
-                </p>
-            {% endif %}
-            <form id="login-form" method="post" action="{% url 'login' %}" autocomplete="off">
-                {% csrf_token %}
-                <div class="form-group mb-3 form-custom">
-                    <label for="email">E-mail*:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        class="form-control mt-2"
-                        required
-                    />
-                </div>
-                <div class="form-group mb-3 form-custom">
-                    <label for="password">Senha*:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        class="form-control mt-2"
-                        required
-                    />
-                </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </form>
-            <button type="button" class="btn btn-link" onclick="location.href = 'create-user/'">Novo por aqui? Cadastre-se</button>
-        </div>
-    </div>
-</div>
-
+        <h1 class="mb-2">Login</h1>
+    {% if error %}
+        <p class="mb-4 error-message">
+            {{ error }}
+        </p>
+    {% endif %}
+        <form id="login-form" method="post" action="{% url 'login' %}" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-group mb-3 form-custom">
+                <label for="email">E-mail*:</label>
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="form-control mt-2"
+                    required
+                />
+            </div>
+            <div class="form-group mb-3 form-custom">
+                <label for="password">Senha*:</label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    class="form-control mt-2"
+                    required
+                />
+            </div>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+        <a href="{% url 'create-user' %}" class="btn btn-link">Novo por aqui? Cadastre-se!</a>
 
 {% endblock content %}

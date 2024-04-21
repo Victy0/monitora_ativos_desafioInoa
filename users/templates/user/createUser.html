@@ -4,78 +4,73 @@
 
 {% block content %}
 
-<div class="container-fluid min-vh-100 container-page">
-    <div class="row justify-content-center">
-        <div class="col-sm-6">
-            {% if edit %}
-                <h1 class="mb-2">Edição de usuário</h1>
-            {% else %}
-                <h1 class="mb-2">Cadastro novo usuário</h1>
-            {% endif %}
+    {% if edit %}
+        <h1 class="mb-2">Edição de usuário</h1>
+    {% else %}
+        <h1 class="mb-2">Cadastro novo usuário</h1>
+    {% endif %}
 
-            {% if error %}
-                <p class="mb-4 error-message">
-                    {{ error }}
-                </p>
-            {% endif %}
+    {% if error %}
+        <p class="mb-4 error-message">
+            {{ error }}
+        </p>
+    {% endif %}
 
-            {% if edit %}
-                <form id="edit-user-form" method="post" action="{% url 'edit-user' %}" autocomplete="off">
-            {% else %}
-                <form id="create-user-form" method="post" action="{% url 'create-user' %}" autocomplete="off">
-            {% endif %}            
-                {% csrf_token %}
-                <div class="form-group mb-3 form-custom">
-                    <label for="user_name">Nome*:</label>
-                    <input
-                        type="text"
-                        name="user_name"
-                        id="user_name"
-                        class="form-control mt-2"
-                        {% if form.data.user_name != None %}
-                            value={{ form.data.user_name }}
-                        {% endif %}
-                        required
-                    />
-                </div>
-                <div class="form-group mb-3 form-custom">
-                    <label for="email">E-mail*:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        class="form-control mt-2"
-                        {% if form.data.email != None %}
-                            value={{ form.data.email }}
-                        {% endif %}
-                        required
-                    />
-                </div>
-                <div class="form-group mb-3 form-custom">
-                    <label for="password">Senha*:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        class="form-control mt-2"
-                        {% if form.data.password != None and not edit%}
-                            value={{ form.data.password }}
-                        {% endif %}
-                        required
-                    />
-                </div>
-
-                {% if edit %}
-                    <button type="button" class="btn btn-danger" disabled>Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Editar</button>
-                {% else %}
-                    <button type="button" class="btn btn-danger" onclick="location.href = '/'">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+    {% if edit %}
+        <form id="edit-user-form" method="post" action="{% url 'edit-user' %}" autocomplete="off">
+    {% else %}
+        <form id="create-user-form" method="post" action="{% url 'create-user' %}" autocomplete="off">
+    {% endif %}            
+            {% csrf_token %}
+            <div class="form-group mb-3 form-custom">
+                <label for="user_name">Nome*:</label>
+                <input
+                    type="text"
+                    name="user_name"
+                    id="user_name"
+                    class="form-control mt-2"
+                {% if form.data.user_name != None %}
+                    value={{ form.data.user_name }}
                 {% endif %}
-                
-            </form>
-        </div>
-    </div>
-</div>
+                    required
+                />
+            </div>
+            <div class="form-group mb-3 form-custom">
+                <label for="email">E-mail*:</label>
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="form-control mt-2"
+                {% if form.data.email != None %}
+                    value={{ form.data.email }}
+                {% endif %}
+                    required
+                />
+            </div>
+            <div class="form-group mb-3 form-custom">
+                <label for="password">Senha*:</label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    class="form-control mt-2"
+                {% if form.data.password != None and not edit%}
+                    value={{ form.data.password }}
+                {% endif %}
+                    required
+                />
+            </div>
+
+        {% if edit %}
+            <button type="button" class="btn btn-danger" disabled>Cancelar</button>
+            <button type="submit" class="btn btn-primary">Editar</button>
+        </form>
+        {% else %}
+            
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
+        <a href="{% url 'login' %}" class="btn btn-link">Já possui Cadastro? Acesse sua conta!</a>
+        {% endif %}
 
 {% endblock content %}

@@ -4,23 +4,17 @@
 
 {% block content %}
 
-<div class="container-fluid min-vh-100 container-page">
-    <div class="row justify-content-center">
-        <div class="col-sm-6">
-            <h1 class="mb-2">Interface de Listagem de ativo</h1>
+    <h1 class="mb-2">Interface de Listagem de ativo</h1>
 
-            <a href="{% url 'create-stock' %}" class="btn btn-primary">Novo Ativo</a>
-            <ul class="stock-list">
-                {% for stock in stockList %}
-                    <li class="stock-item">
-                        <span>Nome</span>
-                        <span>editar</span>
-                        <span>deletar</span>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-</div>
+    <a href="{% url 'create-stock' %}" class="btn btn-primary">Novo Ativo</a>
+    <ul class="stock-list">
+    {% for stock in stockList %}
+        <li class="stock-item">
+            <span>Nome</span>
+            <span>editar</span>
+            <span>deletar</span>
+        </li>
+    {% endfor %}
+    </ul>
 
 {% endblock content %}

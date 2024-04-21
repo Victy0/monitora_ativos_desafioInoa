@@ -4,76 +4,73 @@
 
 {% block content %}
 
-<div class="container-fluid min-vh-100 container-page">
-    <div class="row justify-content-center">
-        <div class="col-sm-6">
-        {% if edit %}
-            <h1 class="mb-2">Edição de ativo</h1>
-        {% else %}
-            <h1 class="mb-2">Cadastro de ativo</h1>
-        {% endif %}
+    {% if edit %}
+        <h1 class="mb-2">Edição de ativo</h1>
+    {% else %}
+        <h1 class="mb-2">Cadastro de ativo</h1>
+    {% endif %}
 
-        {% if error %}
-            <p class="mb-4 error-message">
-                {{ error }}
-            </p>
-        {% endif %}
+    {% if error %}
+        <p class="mb-4 error-message">
+            {{ error }}
+        </p>
+    {% endif %}
 
-        {% if new %}
-            <form id="search-stock-form" method="post" action="{% url 'search-stock' %}" autocomplete="off">
-                {% csrf_token %}
-        {% endif %}
+    {% if new %}
+        <form id="search-stock-form" method="post" action="{% url 'search-stock' %}" autocomplete="off">
+            {% csrf_token %}
+    {% endif %}
 
-                <div class="form-group mb-3 form-custom">
-                    <div class="form-input-inline">
-                        <label for="acronym">Sigla*:</label>
-                        <input
-                            type="text"
-                            name="acronym"
-                            id="acronym"
-                            class="form-control mt-2"
-                        {% if new %}
-                            {% if form.data.acronym != None %}
-                                value={{ form.data.acronym }}
-                            {% endif %}
-                            required
-                        {% else %}
-                            {% if stock.acronym != None %}
-                                value={{ stock.acronym }}
-                            {% endif %}
-                            disabled
+            <div class="form-group mb-3 form-custom">
+                <div class="form-input-inline">
+                    <label for="acronym">Sigla*:</label>
+                    <input
+                        type="text"
+                        name="acronym"
+                        id="acronym"
+                        class="form-control mt-2"
+                    {% if new %}
+                        {% if form.data.acronym != None %}
+                            value={{ form.data.acronym }}
                         {% endif %}
-                        />
-                    </div>
-                    <div class="form-check form-checkbox-inline">
-                        <input
-                            type="checkbox"
-                            name="is_brazilian"
-                            id="is_brazilian"
-                            class="form-check-input"
-                        {% if new %}
-                            {% if form.data.is_brazilian != None %}
-                                {% if form.data.is_brazilian %}checked="checked"{% endif %}
-                            {% else %}
+                        required
+                    {% else %}
+                        {% if stock.acronym != None %}
+                            value={{ stock.acronym }}
+                        {% endif %}
+                        disabled
+                    {% endif %}
+                    />
+                </div>
+                <div class="form-check form-checkbox-inline">
+                    <input
+                        type="checkbox"
+                        name="is_brazilian"
+                        id="is_brazilian"
+                        class="form-check-input"
+                    {% if new %}
+                        {% if form.data.is_brazilian != None %}
+                            {% if form.data.is_brazilian %}checked="checked"{% endif %}
+                        {% else %}
+                            checked="checked"
+                        {% endif %}
+                    {% else %}
+                        {% if stock.is_brazilian != None %}
+                            {% if stock.is_brazilian %}
                                 checked="checked"
                             {% endif %}
-                        {% else %}
-                            {% if stock.is_brazilian != None %}
-                                {% if stock.is_brazilian %}
-                                    checked="checked"
-                                {% endif %}
-                            {% endif %}
-                            disabled
                         {% endif %}
-                        />
-                        <label class="form-check-label" for="is_brazilian">Ativo brasileiro</label>
-                    </div>
+                        disabled
+                    {% endif %}
+                    />
+                    <label class="form-check-label" for="is_brazilian">Ativo brasileiro</label>
                 </div>
+            </div>
 
-        {% if new %}
-                <button type="submit" class="btn btn-primary">Pesquisar</button>
-            </form>
-        {% endif %}
+    {% if new %}
+            <button type="submit" class="btn btn-primary">Pesquisar</button>
+        </form>
+    {% endif %}
 
     {% if new == None %}
         {% if edit %}
@@ -130,8 +127,5 @@
             {% endif %}
             </form>
     {% endif %}
-        </div>
-    </div>
-</div>
 
 {% endblock content %}
