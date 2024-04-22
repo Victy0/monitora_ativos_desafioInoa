@@ -18,22 +18,40 @@ class StockForm(forms.ModelForm):
         except Stock.DoesNotExist:
             stock_db = None
             
+        stock_name, current_price = get_stock_info(acronym, is_brazilian)
+            
         if stock_db is not None:
-            return None, stock_db
+            return None, stock_db, current_price
 
-        stock_name = get_stock_info(acronym, is_brazilian)
         if stock_name is None:
-            return "Ativo não encontrado!", stock_name
+            return "Ativo não encontrado!", None, None
         
         stock = Stock()
         stock.acronym = acronym
         stock.is_brazilian = True
         stock.name = stock_name
         
-        return None, stock
+        return None, stock, current_price
 
 class UserStockForm(forms.ModelForm):
     
     class Meta:
         model = UserStock
         fields = ('max_price', 'min_price',  'update_frequency')
+        
+    def validate_data(self):
+        max_price = self.data['max_price']
+        min_price = self.data['min_price']
+        update_frequency = self.data['update_frequency']
+        
+        if max_price is None:
+            return "Limite Máximo precisa ser preenchido!"
+        if min_price is None:
+            return "Limite Mínimo precisa ser preenchido!"
+        if update_frequency is None:
+            return "Periodicidade precisa ser preenchido!"
+        
+        if float(min_price) >= float(max_price):
+            return "Valor do Limite Máximo precisa ser maior que valor do Limite Mínimo!"
+        
+        return None

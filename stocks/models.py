@@ -10,9 +10,8 @@ class Stock(models.Model):
     id_stock = models.AutoField(_("identificador do registro de ativo"), primary_key=True)
     name = models.CharField(_("nome do ativo"), max_length=50)
     acronym = models.CharField(_("sigla do ativo"), max_length=10, unique=True)
-    sector = models.CharField(_("setor de operação do ativo"), max_length=100, null=True)
     is_brazilian = models.BooleanField(_("indicativo se ativo é brasileiro"), default=True)
-    creation_date = models.DateTimeField(_("data de criação do registro de usuário no sistema"), default=timezone.now)
+    creation_date = models.DateTimeField(_("data de criação do registro de ativo no sistema"), default=timezone.now)
     
     class Meta:
         db_table = "stock"
@@ -27,34 +26,48 @@ class Stock(models.Model):
             'acronym': self.acronym,
             'is_brazilian': self.is_brazilian
         }
+        
+    def get_created_or_create(stock_params):
+        if stock_params['id_stock'] is not None:
+            return Stock.objects.get(id_stock=stock_params['id_stock'])
+        
+        stock = Stock()
+        stock.acronym = stock_params['acronym']
+        stock.name = stock_params['name']
+        stock.is_brazilian = True
+        stock.save()
+        
+        return stock
     
 class UserStock(models.Model):
-    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    id_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, db_index=True)
     max_price = models.DecimalField(_("valor máximo do túnel estático definido pelo usuário"), max_digits=10, decimal_places=2, default=0)
     min_price = models.DecimalField(_("valor mínimo do túnel estático definido pelo usuário"), max_digits=10, decimal_places=2, default=0)
     update_frequency = models.IntegerField(_("frequencia em minutos de atualização dos dados do ativo definido pelo usuário"), default=0)
     
     class Meta:
         db_table = "user_stock"
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'stock'], name='unique_user_stock_combination'
+            )
+        ]
         
     def __str__(self):
-        return '(Usuário: ' + str(self.id_user) + '; Ativo: ' + str(self.id_stock) + ')'
+        return '(Usuário: ' + str(self.user.email) + '; Ativo: ' + str(self.stock.acronym) + ')'
     
     def get_options_to_update_frequency():
-        return [1, 5, 15, 30, 60]
+        return ['3', '5', '15', '30', '60']
     
-class StockHistory(models.Model):
-    id_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    creation_date = models.DateTimeField(_("data de criação do registro de usuário no sistema"), default=timezone.now)
-    previous_close = models.DecimalField(_("preço do frechamento anterior"), max_digits=10, decimal_places=2, default=0)
-    open_price = models.DecimalField(_("preço de aberuta do ativo"), max_digits=10, decimal_places=2, default=0)
-    max_price = models.DecimalField(_("preço de máxima do ativo"), max_digits=10, decimal_places=2, default=0)
-    min_price = models.DecimalField(_("preço de mínima do ativo"), max_digits=10, decimal_places=2, default=0)
-    volume = models.BigIntegerField(_("volume do ativo"), default=0)
+    def translate_form_to_model(form):
+        user_stock = UserStock()
+        user_stock.max_price = form.data['max_price']
+        user_stock.min_price = form.data['min_price']
+        user_stock.update_frequency = int(form.data['update_frequency'])
+        return user_stock
     
-    class Meta:
-        db_table = "stock_history"
-        
-    def __str__(self):
-        return '(Ativo: ' + str(self.id_stock) + ';' + 'Data:' + format(self.creation_date, 'DD/MM/YYYY %H:%M') + ')'
+    def exists_register(user, stock):
+        if UserStock.objects.filter(user=user, stock=stock).exists():
+            return True
+        return False

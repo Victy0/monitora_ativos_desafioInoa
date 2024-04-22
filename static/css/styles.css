@@ -84,6 +84,7 @@ html, body
 {
     display: inline-block !important;
     width: 40%;
+    margin-right: 1.5em;
 }
 .form-checkbox-inline
 {
@@ -95,4 +96,11 @@ html, body
 {
     padding-bottom: 2em;
     border-bottom: 3px solid black;
+}
+.form-input-inline span,
+.form-check span,
+.form-group span
+{
+    font-weight: 600;
+    background-color: rgb(245, 245, 245);
 }
