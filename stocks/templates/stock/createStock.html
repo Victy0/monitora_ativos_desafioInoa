@@ -1,0 +1,151 @@
+{% extends "base.html" %} 
+
+{% block title%} Monitora Ativos - Cadastro de ativo {%endblock%}
+
+{% block content %}
+
+    {% if id_stock %}
+        <h1 class="mb-2">Edição de ativo</h1>
+    {% else %}
+        <h1 class="mb-2">Cadastro de ativo</h1>
+    {% endif %}
+
+    {% if error %}
+        <p class="mb-4 error-message">
+            {{ error }}
+        </p>
+    {% endif %}
+
+    {% if new %}
+        <form id="search-stock-form" method="post" action="{% url 'search-stock' %}" autocomplete="off">
+            {% csrf_token %}
+    {% endif %}
+
+            <div class="form-group mb-3 form-custom">
+                <div class="form-input-inline">
+                {% if new %}
+                    <label for="acronym">Sigla*:</label>
+                    <input
+                        type="text"
+                        name="acronym"
+                        id="acronym"
+                        class="form-control mt-2"
+                        {% if form.data.acronym != None %}
+                            value={{ form.data.acronym }}
+                        {% endif %}
+                        required
+                    />
+                {% else %}
+                    <label class="form-check-label">Sigla:</label>
+                    <span class="form-control mt-2">
+                        {{ stock.acronym }}
+                    </span>
+                {% endif %}
+                </div>
+                <div class="form-check form-checkbox-inline">
+                {% if new %}
+                    <input
+                        type="checkbox"
+                        name="is_brazilian"
+                        id="is_brazilian"
+                        class="form-check-input"
+                        {% if form.data.is_brazilian != None %}
+                            {% if form.data.is_brazilian %}checked="checked"{% endif %}
+                        {% else %}
+                            checked="checked"
+                        {% endif %}
+                        disabled
+                    />
+                    <label class="form-check-label" for="is_brazilian">Ativo brasileiro</label>
+                {% else %}
+                    <label class="form-check-label">Preço Atual (R$):</label>
+                    <span class="form-control mt-2">
+                        {{ request.session.current_price }}
+                    </span>
+            {% endif %}
+                </div>
+            </div>
+
+    {% if new %}
+            <a href="{% url 'stock-list' %}" class="btn btn-danger">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Pesquisar</button>
+        </form>
+    {% endif %}
+
+    {% if new == None %}
+            <div class="form-group mb-3 form-custom form-bottom-border">
+                <label class="form-check-label">Nome:</label>
+                <span class="form-control mt-2">
+                    {{ stock.name }}
+                </span>
+            </div>
+        {% if id_stock %}
+            <form id="edit-stock-form" method="post" action="{% url 'edit-stock' id_stock=id_stock %}" autocomplete="off">
+        {% else %}
+            <form id="create-user-stock-form" method="post" action="{% url 'create-stock' %}" autocomplete="off">
+        {% endif %}            
+                {% csrf_token %}
+                <div class="form-group mb-3 form-custom">
+                    <div class="form-input-inline">
+                        <label for="min_price">Limite Mínimo do Túnel (R$)*:</label>
+                        <input
+                            type="number"
+                            min="0.00"
+                            onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
+                            name="min_price"
+                            id="min_price"
+                            class="form-control mt-2"
+                        {% if form.data.min_price != 0 %}
+                            value={{ form.data.min_price }}
+                        {% endif %}
+                            required
+                        />
+                    </div>
+                    <div class="form-input-inline">
+                        <label for="max_price">Limite Máximo do Túnel (R$)*:</label>
+                        <input
+                            type="number"
+                            min="0.00"
+                            onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
+                            name="max_price"
+                            id="max_price"
+                            class="form-control mt-2"
+                        {% if form.data.max_price != 0 %}
+                            value={{ form.data.max_price }}
+                        {% endif %}
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="form-group mb-3 form-custom">
+                    <label for="update_frequency">Periodicidade de verificação de cotação (min)*:</label>
+                    <select
+                        id="update_frequency"
+                        name="update_frequency"
+                        class="form-control form-select2"
+                        required
+                    >
+                        <option value="">Selecione uma opção</option>
+                    {% for option in options_update %}
+                        <option 
+                            value="{{ option }}"
+                            {% if form.data.update_frequency != None and form.data.update_frequency == option %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ option }}
+                        </option>
+                    {% endfor %}
+                    </select>
+                </div>
+
+                <a href="{% url 'stock-list' %}" class="btn btn-danger">Cancelar</a>
+            {% if id_stock %}
+                <button type="submit" class="btn btn-primary">Editar</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            {% endif %}
+            </form>
+    {% endif %}
+
+{% endblock content %}

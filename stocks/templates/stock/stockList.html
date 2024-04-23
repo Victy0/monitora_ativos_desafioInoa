@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+
+{% block title%} Monitora Ativos - Listagem de ativos {%endblock%}
+
+{% block content %}
+
+    <h1 class="mb-2">Interface de Listagem de ativo</h1>
+
+    <a href="{% url 'create-stock' %}" class="btn btn-primary">Novo Ativo</a>
+    <ul class="stock-list">
+    {% for stock in stockList %}
+        <li class="stock-item">
+            <span>Nome</span>
+            <span>editar</span>
+            <span>deletar</span>
+        </li>
+    {% endfor %}
+    </ul>
+
+{% endblock content %}

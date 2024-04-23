@@ -13,8 +13,17 @@
     <body>
         <div class="container-base">
             <div class="container-template">
-                {% block content %}
-                {% endblock %}
+                <div class="container-fluid min-vh-95 container-page">
+                {% if 'id_user' in request.session %}
+                    {% include "navbar.html" %}
+                {% endif %}
+                    <div class="row justify-content-center web-view">
+                        <div class="col-sm-6">
+                            {% block content %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
