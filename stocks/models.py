@@ -71,3 +71,21 @@ class UserStock(models.Model):
         if UserStock.objects.filter(user=user, stock=stock).exists():
             return True
         return False
+    
+class PriceQuoteHistory(models.Model):
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    price_quote = models.DecimalField(_("preço da cotação no momento da monitorização"), max_digits=10, decimal_places=2, default=0)
+    creation_date = models.DateTimeField(_("data de criação do registro de cotação monitorada"), default=timezone.now)
+    update_date = models.DateTimeField(_("data de atualização do registro em caso de não alteração da cotação monitorada desde último monitoramento"), default=timezone.now)
+    update_frequency = models.IntegerField(_("frequencia em minutos de atualização dos dados da cotação"), null=True)
+    
+    class Meta:
+        db_table = "price_quote_history"
+        constraints = [
+            models.UniqueConstraint(
+                fields=['stock', 'creation_date'], name='unique_stock_creation_date_combination'
+            )
+        ]
+        
+    def __str__(self):
+        return '(Ativo: ' + str(self.id_stock) + ';' + 'Data:' + format(self.creation_date, 'DD/MM/YYYY %H:%M') + ')'

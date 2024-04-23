@@ -9,7 +9,7 @@ from users.models import User
 @my_login_required
 def stock_list(request):
     id_user = int(User.decode_field_str(request.session['id_user']))
-    stock_list = UserStock.objects.filter( user = id_user )
+    stock_list = UserStock.objects.filter( user = id_user ).order_by('stock__acronym')
     
     return render(request, 'stock/stockList.html', {'stockList': stock_list})
 
