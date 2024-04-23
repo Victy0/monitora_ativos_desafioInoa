@@ -21,14 +21,13 @@ def create_stock(request):
             return redirect('stock-list')
         
         user_stock_form = UserStockForm(request.POST)
-        options_update_frequency = UserStock.get_options_to_update_frequency()
         
         error_message = user_stock_form.validate_data()
         
         if error_message is not None:
             return render(request,
                         'stock/createStock.html',
-                        {'stock': request.session['stock'], 'form': user_stock_form, 'options_update': options_update_frequency, 'error': error_message})
+                        {'stock': request.session['stock'], 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency(), 'error': error_message})
         
         user_stock = UserStock.translate_form_to_model(user_stock_form)
         
@@ -42,7 +41,7 @@ def create_stock(request):
         if UserStock.exists_register(user_stock.user, user_stock.stock):
             return render(request,
                         'stock/createStock.html',
-                        {'stock': request.session['stock'], 'form': user_stock_form, 'options_update': options_update_frequency, 'error': "Ativo já monitorado!"})
+                        {'stock': request.session['stock'], 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency(), 'error': "Ativo já monitorado!"})
         
         user_stock.save()
         
@@ -65,6 +64,40 @@ def search_stock(request):
     request.session['stock'] = stock.serialize_stock_for_create()
     current_price = str(current_price).replace(',', '').replace('.',',')
     request.session['current_price'] = current_price
+    
     user_stock_form = StockForm(request.POST)
-    options_update_frequency = UserStock.get_options_to_update_frequency()
-    return render(request, 'stock/createStock.html', {'stock': stock, 'form': user_stock_form, 'options_update': options_update_frequency})
+    return render(request, 'stock/createStock.html', {'stock': stock, 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency()})
+
+@my_login_required
+def edit_stock(request, id_stock):
+    id_user = int(User.decode_field_str(request.session['id_user']))
+    
+    try:
+        user_stock = UserStock.objects.get(user=id_user, stock=id_stock)
+    except UserStock.DoesNotExist:
+        redirect('stock-list')
+    
+    if request.method == 'POST':
+        user_stock_form = UserStockForm(request.POST)
+        error_message = user_stock_form.validate_data()
+        
+        if error_message is not None:
+            stock = Stock.objects.get(id_stock=id_stock)
+            return render(request,
+                        'stock/createStock.html',
+                        {'stock': stock, 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency(), 'id_stock': id_stock ,'error': error_message})
+            
+        user_stock.max_price = user_stock_form.data['max_price']
+        user_stock.min_price = user_stock_form.data['min_price']
+        user_stock.update_frequency = user_stock_form.data['update_frequency']
+        user_stock.save()
+        
+        del request.session['current_price']
+        return redirect('stock-list')
+    else:
+        user_stock_form, current_price = UserStockForm.translate_model_to_form_edit(user_stock)
+        stock = Stock.objects.get(id_stock=id_stock)
+        current_price = str(current_price).replace(',', '').replace('.',',')
+        request.session['current_price'] = current_price
+        
+        return render(request, 'stock/createStock.html', {'stock': stock, 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency(), 'id_stock': id_stock})

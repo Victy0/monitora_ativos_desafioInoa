@@ -11,11 +11,11 @@ def get_stock_info(stock_acronim, stock_is_brazilian):
     url_yahoo_finances_options = URL_BASE_YAHOO_FINANCES_OPTIONS + acronim + '?interval=1m'
 
     response = requests.get(url_yahoo_finances_options, headers={'User-agent': 'Mozilla/5.0'})
-    data = response.json()
+    data_response = response.json()
     
-    if len(data['optionChain']['result']) == 0:
+    if len(data_response['optionChain']['result']) == 0:
         return None, None
     
-    stock_name = data['optionChain']['result'][0]['quote']['longName']
-    current_price = data['optionChain']['result'][0]['quote']['regularMarketPrice']
+    stock_name = data_response['optionChain']['result'][0]['quote']['longName']
+    current_price = data_response['optionChain']['result'][0]['quote']['regularMarketPrice']
     return stock_name, current_price

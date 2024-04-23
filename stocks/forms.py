@@ -52,6 +52,16 @@ class UserStockForm(forms.ModelForm):
             return "Periodicidade precisa ser preenchido!"
         
         if float(min_price) >= float(max_price):
-            return "Valor do Limite Máximo precisa ser maior que valor do Limite Mínimo!"
+            return "Valor do Limite Mínimo precisa ser menor que valor do Limite Máximo!"
         
         return None
+    
+    def translate_model_to_form_edit(user_stock):
+        form = UserStockForm()
+        form.data['max_price'] = str(user_stock.max_price)
+        form.data['min_price'] = str(user_stock.min_price)
+        form.data['update_frequency'] = str(user_stock.update_frequency)
+        
+        current_price = get_stock_info(user_stock.stock.acronym, True)[1]
+        
+        return form, current_price

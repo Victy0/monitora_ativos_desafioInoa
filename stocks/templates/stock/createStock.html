@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    {% if edit %}
+    {% if id_stock %}
         <h1 class="mb-2">Edição de ativo</h1>
     {% else %}
         <h1 class="mb-2">Cadastro de ativo</h1>
@@ -79,8 +79,8 @@
                     {{ stock.name }}
                 </span>
             </div>
-        {% if edit %}
-            <form id="edit-stock-form" method="post" action="{% url 'edit-stock' %}" autocomplete="off">
+        {% if id_stock %}
+            <form id="edit-stock-form" method="post" action="{% url 'edit-stock' id_stock=id_stock %}" autocomplete="off">
         {% else %}
             <form id="create-user-stock-form" method="post" action="{% url 'create-stock' %}" autocomplete="off">
         {% endif %}            
@@ -140,7 +140,7 @@
                 </div>
 
                 <a href="{% url 'stock-list' %}" class="btn btn-danger">Cancelar</a>
-            {% if edit %}
+            {% if id_stock %}
                 <button type="submit" class="btn btn-primary">Editar</button>
             {% else %}
                 <button type="submit" class="btn btn-primary">Cadastrar</button>
