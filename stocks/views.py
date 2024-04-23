@@ -101,3 +101,13 @@ def edit_stock(request, id_stock):
         request.session['current_price'] = current_price
         
         return render(request, 'stock/createStock.html', {'stock': stock, 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency(), 'id_stock': id_stock})
+    
+@my_login_required
+def delete_stock(request, id_stock):    
+    id_user = int(User.decode_field_str(request.session['id_user']))
+    UserStock.objects.filter(user=id_user, stock=id_stock).delete()
+    
+    if not UserStock.objects.filter(stock=id_stock).exists():
+        Stock.objects.filter(id_stock=id_stock).delete()
+
+    return redirect('stock-list')

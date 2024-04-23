@@ -3,7 +3,7 @@
 {% block title%} Monitora Ativos - Usuário {%endblock%}
 
 {% block content %}
-
+    <div class="col-lg-6">
     {% if edit %}
         <h1 class="mb-2">Edição de usuário</h1>
     {% else %}
@@ -71,6 +71,6 @@
             <button type="submit" class="btn btn-primary">Cadastrar</button>
         </form>
         <a href="{% url 'login' %}" class="btn btn-link">Já possui Cadastro? Acesse sua conta!</a>
-        {% endif %}
-
+    {% endif %}
+    </div>
 {% endblock content %}

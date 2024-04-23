@@ -21,7 +21,7 @@ def login(request):
             return render(request, 'login/login.html', {'form': loginForm, 'error': error_message})
 
         request.session['id_user'] = id_user
-        return render(request, 'stock/stockList.html')
+        return redirect('stock-list')
         
     return render(request, 'login/login.html')
 

@@ -1,9 +1,9 @@
 {% extends "base.html" %} 
 
-{% block title%} Monitora Ativos - Cadastro de ativo {%endblock%}
+{% block title%} Monitora Ativos - Ativo {%endblock%}
 
 {% block content %}
-
+    <div class="col-lg-6">
     {% if id_stock %}
         <h1 class="mb-2">Edição de ativo</h1>
     {% else %}
@@ -147,5 +147,5 @@
             {% endif %}
             </form>
     {% endif %}
-
+    </div>
 {% endblock content %}

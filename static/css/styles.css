@@ -104,3 +104,15 @@ html, body
     font-weight: 600;
     background-color: rgb(245, 245, 245);
 }
+
+.btn-new-stock
+{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    float: right;
+}
+.empty-stock-list
+{
+    font-weight: 600;
+    background-color: rgb(255, 227, 227) !important;
+}

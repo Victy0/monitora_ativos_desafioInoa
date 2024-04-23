@@ -17,11 +17,9 @@
                 {% if 'id_user' in request.session %}
                     {% include "navbar.html" %}
                 {% endif %}
-                    <div class="row justify-content-center web-view">
-                        <div class="col-sm-6">
-                            {% block content %}
-                            {% endblock %}
-                        </div>
+                    <div class="row justify-content-center">
+                        {% block content %}
+                        {% endblock %}
                     </div>
                 </div>
             </div>
