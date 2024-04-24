@@ -45,6 +45,7 @@ class UserStock(models.Model):
     max_price = models.DecimalField(_("valor máximo do túnel estático definido pelo usuário"), max_digits=10, decimal_places=2, default=0)
     min_price = models.DecimalField(_("valor mínimo do túnel estático definido pelo usuário"), max_digits=10, decimal_places=2, default=0)
     update_frequency = models.IntegerField(_("frequencia em minutos de atualização dos dados do ativo definido pelo usuário"), default=0)
+    update_date = models.DateTimeField(_("data de criação/atualização do registro"), default=timezone.now)
     
     class Meta:
         db_table = "user_stock"
@@ -56,6 +57,14 @@ class UserStock(models.Model):
         
     def __str__(self):
         return '(Usuário: ' + str(self.user.email) + '; Ativo: ' + str(self.stock.acronym) + ')'
+    
+    def update_register(self, form):
+        self.max_price = form.data['max_price']
+        self.min_price = form.data['min_price']
+        if self.update_frequency != form.data['update_frequency']:
+            self.update_date = timezone.now().isoformat()
+        self.update_frequency = form.data['update_frequency']
+        self.save()
     
     def get_options_to_update_frequency():
         return ['3', '5', '15', '30', '60']

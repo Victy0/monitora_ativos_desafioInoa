@@ -6,7 +6,7 @@
     <div class="col-lg-10">
         <h1 class="mb-2">Listagem de Ativos</h1>
 
-        <a href="{% url 'create-stock' %}" class="btn btn btn-success btn-new-stock">Adicionar Novo Ativo</a>
+        <a href="{% url 'create-stock' %}" class="btn btn btn-success btn-right-position">Adicionar Novo Ativo</a>
 
         <table class="table table-striped">
             <thead>
@@ -21,19 +21,19 @@
             <tbody>
             {% for stock_user in stockList %}
                 <tr>
-                    <td data-toggle="tooltip" data-placement="bottom" title={{stock_user.stock.name}}>{{stock_user.stock.acronym}}</td>
+                    <td data-toggle="tooltip" data-placement="bottom" title="{{stock_user.stock.name}}">{{stock_user.stock.acronym}}</td>
                     <td>R$ {{stock_user.min_price}}</td>
                     <td>R$ {{stock_user.max_price}}</td>
                     <td>{{stock_user.update_frequency}} min</td>
                     <td>
                         <a href="{% url 'edit-stock' id_stock=stock_user.stock.id_stock %}">Editar</a>
                         <a href="{% url 'delete-stock' id_stock=stock_user.stock.id_stock %}">Excluir</a>
-                        <!--<a href="{% url 'stock-list' %}">Detalhes</a>-->
+                        <a href="{% url 'price-quote-history' id_stock=stock_user.stock.id_stock frequency=stock_user.update_frequency %}">Detalhes</a>
                     </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="5" class="empty-stock-list">NENHUM ATIVO MONITORADO!!!</td>
+                    <td colspan="5" class="empty-list">NENHUM ATIVO MONITORADO!!!</td>
                 </tr>
             {% endfor %}
             </tbody>
