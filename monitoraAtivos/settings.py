@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'emails',
-    'stocks'
+    'stocks',
+    'taskscheduler'
 ]
 
 MIDDLEWARE = [
@@ -109,9 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
+
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_TZ = True
 

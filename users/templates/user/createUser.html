@@ -3,7 +3,7 @@
 {% block title%} Monitora Ativos - Usuário {%endblock%}
 
 {% block content %}
-
+    <div class="col-lg-6">
     {% if edit %}
         <h1 class="mb-2">Edição de usuário</h1>
     {% else %}
@@ -71,6 +71,27 @@
             <button type="submit" class="btn btn-primary">Cadastrar</button>
         </form>
         <a href="{% url 'login' %}" class="btn btn-link">Já possui Cadastro? Acesse sua conta!</a>
-        {% endif %}
+    {% endif %}
+    </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            document.getElementById('edit-user-form').addEventListener('submit', function(event)
+            {
+                event.preventDefault();
+                document.getElementById('modal-text-body').innerHTML = 'Deseja continuar com a edição dos dados do seu usuário cadastrado?'
+                document.getElementById('modal-confirm').style.display = 'flex';
+            });
+
+            document.getElementById('close-modal').addEventListener('click', function()
+            {
+                document.getElementById('modal-confirm').style.display = 'none';
+            });
+            
+            document.getElementById('submit-confirm').addEventListener('click', function()
+            {
+                document.getElementById('edit-user-form').submit();
+            });
+        });
+    </script>
 {% endblock content %}

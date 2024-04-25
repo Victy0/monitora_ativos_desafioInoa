@@ -21,7 +21,7 @@ def login(request):
             return render(request, 'login/login.html', {'form': loginForm, 'error': error_message})
 
         request.session['id_user'] = id_user
-        return render(request, 'stock/stockList.html')
+        return redirect('stock-list')
         
     return render(request, 'login/login.html')
 
@@ -60,7 +60,8 @@ def edit_user(request):
     id_user = int(User.decode_field_str(id_user_str))
     
     if request.method == 'POST':
-        error_message = UserForm.validate_fields(True)
+        user_form = UserForm(request.POST)
+        error_message = user_form.validate_fields(True)
         if error_message is not None:
             return render(request, 'user/createUser.html', {'form': user_form, 'edit': True, 'error': error_message})
         

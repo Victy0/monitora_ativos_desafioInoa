@@ -1,13 +1,13 @@
 {% extends "base.html" %} 
 
-{% block title%} Monitora Ativos - Cadastro de ativo {%endblock%}
+{% block title%} Monitora Ativos - Ativo {%endblock%}
 
 {% block content %}
-
+    <div class="col-lg-6">
     {% if id_stock %}
-        <h1 class="mb-2">Edição de ativo</h1>
+        <h1 class="mb-2">Edição de ativo monitorado</h1>
     {% else %}
-        <h1 class="mb-2">Cadastro de ativo</h1>
+        <h1 class="mb-2">Cadastro de ativo monitorado</h1>
     {% endif %}
 
     {% if error %}
@@ -89,8 +89,10 @@
                     <div class="form-input-inline">
                         <label for="min_price">Limite Mínimo do Túnel (R$)*:</label>
                         <input
+                            required
                             type="number"
                             min="0.00"
+                            step="0.01"
                             onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
                             name="min_price"
                             id="min_price"
@@ -98,14 +100,15 @@
                         {% if form.data.min_price != 0 %}
                             value={{ form.data.min_price }}
                         {% endif %}
-                            required
                         />
                     </div>
                     <div class="form-input-inline">
                         <label for="max_price">Limite Máximo do Túnel (R$)*:</label>
                         <input
+                            required
                             type="number"
                             min="0.00"
+                            step="0.01"
                             onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
                             name="max_price"
                             id="max_price"
@@ -113,7 +116,6 @@
                         {% if form.data.max_price != 0 %}
                             value={{ form.data.max_price }}
                         {% endif %}
-                            required
                         />
                     </div>
                 </div>
@@ -141,11 +143,32 @@
 
                 <a href="{% url 'stock-list' %}" class="btn btn-danger">Cancelar</a>
             {% if id_stock %}
-                <button type="submit" class="btn btn-primary">Editar</button>
+                <button id="edit-submit" type="submit" class="btn btn-primary">Editar</button>
             {% else %}
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                <button id="create-submit" type="submit" class="btn btn-primary">Cadastrar</button>
             {% endif %}
             </form>
     {% endif %}
+    </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            document.getElementById('edit-stock-form').addEventListener('submit', function(event)
+            {
+                event.preventDefault();
+                document.getElementById('modal-text-body').innerHTML = 'Se alterado a periodicidade de verificação de cotação, o histórico registrado de monitoramento pode ser perdido. Deseja continuar com a edição do ativo monitorado?'
+                document.getElementById('modal-confirm').style.display = 'flex';
+            });
+
+            document.getElementById('close-modal').addEventListener('click', function()
+            {
+                document.getElementById('modal-confirm').style.display = 'none';
+            });
+            
+            document.getElementById('submit-confirm').addEventListener('click', function()
+            {
+                document.getElementById('edit-stock-form').submit();
+            });
+        });
+    </script>
 {% endblock content %}

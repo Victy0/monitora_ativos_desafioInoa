@@ -3,7 +3,7 @@
 {% block title%} Monitora Ativos - Login {%endblock%}
 
 {% block content %}
-
+    <div class="col-lg-6">
         <h1 class="mb-2">Login</h1>
     {% if error %}
         <p class="mb-4 error-message">
@@ -35,5 +35,5 @@
             <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
         <a href="{% url 'create-user' %}" class="btn btn-link">Novo por aqui? Cadastre-se!</a>
-
+    <div class="col-lg-6">
 {% endblock content %}

@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect
 
 from monitoraAtivos.decorators import my_login_required
 from stocks.forms import StockForm, UserStockForm
-from stocks.models import Stock, UserStock
+from stocks.models import PriceQuoteHistory, Stock, UserStock
 from users.models import User
 
 
 @my_login_required
 def stock_list(request):
     id_user = int(User.decode_field_str(request.session['id_user']))
-    stock_list = UserStock.objects.filter( user = id_user )
+    stock_list = UserStock.objects.filter(user=id_user).order_by('stock__acronym')
     
     return render(request, 'stock/stockList.html', {'stockList': stock_list})
 
@@ -87,10 +87,7 @@ def edit_stock(request, id_stock):
                         'stock/createStock.html',
                         {'stock': stock, 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency(), 'id_stock': id_stock ,'error': error_message})
             
-        user_stock.max_price = user_stock_form.data['max_price']
-        user_stock.min_price = user_stock_form.data['min_price']
-        user_stock.update_frequency = user_stock_form.data['update_frequency']
-        user_stock.save()
+        user_stock.update_register(user_stock_form)
         
         del request.session['current_price']
         return redirect('stock-list')
@@ -101,3 +98,25 @@ def edit_stock(request, id_stock):
         request.session['current_price'] = current_price
         
         return render(request, 'stock/createStock.html', {'stock': stock, 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency(), 'id_stock': id_stock})
+    
+@my_login_required
+def delete_stock(request, id_stock):    
+    id_user = int(User.decode_field_str(request.session['id_user']))
+    UserStock.objects.filter(user=id_user, stock=id_stock).delete()
+    
+    if not UserStock.objects.filter(stock=id_stock).exists():
+        Stock.objects.filter(id_stock=id_stock).delete()
+
+    return redirect('stock-list')
+
+@my_login_required
+def price_quote_history(request, id_stock, frequency):
+    id_user = int(User.decode_field_str(request.session['id_user']))
+    try:
+        user_stock = UserStock.objects.get(user=id_user, stock=id_stock)
+    except UserStock.DoesNotExist:
+        redirect('stock-list')
+    
+    price_quote_history_list = PriceQuoteHistory.objects.filter(stock=id_stock, update_frequency=frequency, update_date__gt=user_stock.update_date).order_by('-update_date')
+    
+    return render(request, 'stock/priceQuoteHistoryList.html', {'priceQuoteList': price_quote_history_list, 'userStock': user_stock})

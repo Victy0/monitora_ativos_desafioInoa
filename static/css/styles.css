@@ -86,11 +86,17 @@ html, body
     width: 40%;
     margin-right: 1.5em;
 }
+.form-input-inline-sm
+{
+    display: inline-block !important;
+    width: 30%;
+    margin-right: 0.5em;
+}
 .form-checkbox-inline
 {
     display: inline-block !important;
     width: 40%;
-    margin-left:3em;
+    margin-left: 3em;
 }
 .form-bottom-border
 {
@@ -103,4 +109,58 @@ html, body
 {
     font-weight: 600;
     background-color: rgb(245, 245, 245);
+}
+
+/*** empty-list ***/
+.empty-list
+{
+    font-weight: 600;
+    background-color: rgb(255, 227, 227) !important;
+}
+
+/*** price-quote-details ***/
+.btn-right-position
+{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    float: right;
+}
+.btn-left-position
+{
+    margin-bottom: 0.5em;
+    float:left
+}
+
+/*** images ***/
+.action-links a 
+{
+    text-decoration: none;
+}
+.action-links a img
+{
+    margin-left: 0.8em;
+}
+.action-links a img:first-child
+{
+    max-width: 3vh;
+}
+.action-links a img:nth-child(2)
+{
+    max-width: 15%;
+}
+.action-links a img:nth-child(3)
+{
+    max-width: 20%;
+}
+
+/*** modal ***/
+.fade:not(.show) {
+    opacity: 1;
+    display: none;
+    background-color: rgba(0,0,0, .4);
+}
+    /** para modal em stock-list **/
+.no-show
+{
+    display: none;
 }
