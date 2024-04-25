@@ -73,4 +73,25 @@
         <a href="{% url 'login' %}" class="btn btn-link">Já possui Cadastro? Acesse sua conta!</a>
     {% endif %}
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            document.getElementById('edit-user-form').addEventListener('submit', function(event)
+            {
+                event.preventDefault();
+                document.getElementById('modal-text-body').innerHTML = 'Deseja continuar com a edição dos dados do seu usuário cadastrado?'
+                document.getElementById('modal-confirm').style.display = 'flex';
+            });
+
+            document.getElementById('close-modal').addEventListener('click', function()
+            {
+                document.getElementById('modal-confirm').style.display = 'none';
+            });
+            
+            document.getElementById('submit-confirm').addEventListener('click', function()
+            {
+                document.getElementById('edit-user-form').submit();
+            });
+        });
+    </script>
 {% endblock content %}

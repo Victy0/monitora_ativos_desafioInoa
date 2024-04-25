@@ -1,4 +1,5 @@
 {% extends "base.html" %} 
+{% load static %}
 
 {% block title%} Monitora Ativos - Listagem de ativos {%endblock%}
 
@@ -25,10 +26,17 @@
                     <td>R$ {{stock_user.min_price}}</td>
                     <td>R$ {{stock_user.max_price}}</td>
                     <td>{{stock_user.update_frequency}} min</td>
-                    <td>
-                        <a href="{% url 'edit-stock' id_stock=stock_user.stock.id_stock %}">Editar</a>
-                        <a href="{% url 'delete-stock' id_stock=stock_user.stock.id_stock %}">Excluir</a>
-                        <a href="{% url 'price-quote-history' id_stock=stock_user.stock.id_stock frequency=stock_user.update_frequency %}">Detalhes</a>
+                    <td class="action-links">
+                        <a href="{% url 'edit-stock' id_stock=stock_user.stock.id_stock %}">
+                            <img src="{% static 'images/edit.svg' %}" alt="Edit icon" data-toggle="tooltip" data-placement="bottom" title="Editar">
+                        </a>
+                        <a href="{% url 'price-quote-history' id_stock=stock_user.stock.id_stock frequency=stock_user.update_frequency %}">
+                            <img src="{% static 'images/list.svg' %}" alt="Details icon" data-toggle="tooltip" data-placement="bottom" title="Detalhes de Monitoramento">
+                        </a>
+                        <a id="delete-{{stock_user.stock.id_stock}}" href="#" onclick="openModal({{stock_user.stock.id_stock}}, {{stock_user.stock.acronym}})">
+                            <img src="{% static 'images/trash.svg' %}" alt="Delete icon" data-toggle="tooltip" data-placement="bottom" title="Deletar">
+                        </a>
+                        <a id="confirmed-delete-{{stock_user.stock.id_stock}}" href="{% url 'delete-stock' id_stock=stock_user.stock.id_stock %}" class="no-show"></a>
                     </td>
                 </tr>
             {% empty %}
@@ -39,4 +47,27 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        function openModal(idStock, acronym)
+        {
+            localStorage.setItem('deleteStock', idStock);
+            document.getElementById('modal-text-body').innerHTML = 'Ao excluir o ativo monitorado, o ativo e todo o seu histórico de monitoramento será deletado. Deseja continuar com a exclusão do ativo monitorado selecionado: ' + acronym + '?'
+            document.getElementById('modal-confirm').style.display = 'flex';
+        };
+        document.addEventListener("DOMContentLoaded", function(event) { 
+
+            document.getElementById('close-modal').addEventListener('click', function()
+            {
+                document.getElementById('modal-confirm').style.display = 'none';
+            });
+            
+            document.getElementById('submit-confirm').addEventListener('click', function()
+            {
+                idStock = localStorage.getItem('deleteStock');
+                localStorage.removeItem('deleteStock');
+                document.getElementById('confirmed-delete-' + idStock).click();
+            });
+        });
+    </script>
 {% endblock content %}

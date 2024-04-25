@@ -130,3 +130,37 @@ html, body
     margin-bottom: 0.5em;
     float:left
 }
+
+/*** images ***/
+.action-links a 
+{
+    text-decoration: none;
+}
+.action-links a img
+{
+    margin-left: 0.8em;
+}
+.action-links a img:first-child
+{
+    max-width: 3vh;
+}
+.action-links a img:nth-child(2)
+{
+    max-width: 15%;
+}
+.action-links a img:nth-child(3)
+{
+    max-width: 20%;
+}
+
+/*** modal ***/
+.fade:not(.show) {
+    opacity: 1;
+    display: none;
+    background-color: rgba(0,0,0, .4);
+}
+    /** para modal em stock-list **/
+.no-show
+{
+    display: none;
+}
