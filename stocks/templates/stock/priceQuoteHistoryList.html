@@ -6,9 +6,12 @@
     <div class="col-lg-10">
         <h1 class="mb-2">Monitoramento de cotação</h1>
         
-        <div class="form-group mb-3 form-custom">
-            <a href="{% url 'stock-list' %}" class="btn btn btn-danger btn-left-position">Retonar para Listagem de Ativos</a>
-        <div>
+        <div class="form-input-inline-sm btn-left-position">
+                <a href="{% url 'stock-list' %}" class="btn btn-danger btn-left-position">Retornar para Listagem de Ativos</a>
+        
+                <a href="{% url 'price-quote-history' id_stock=userStock.stock.id_stock frequency=userStock.update_frequency %}" 
+                    class="btn btn-primary btn-left-position">Atualizar Listagem de Monitoramento</a>
+        </div>
 
         <div class="form-group mb-3 form-custom form-bottom-border">
             <div class="form-input-inline-sm">
@@ -20,7 +23,7 @@
             <div class="form-input-inline-sm">
                 <label class="form-check-label">Periodicidade de Monitoramento:</label>
                 <span class="form-control mt-2">
-                    {{ userStock.update_frequency }}
+                    {{ userStock.update_frequency }} min
                 </span>
             </div>
         </div>

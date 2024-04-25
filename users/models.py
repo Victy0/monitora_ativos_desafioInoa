@@ -21,11 +21,13 @@ class User(models.Model):
     def __str__(self):
         return self.email
     
+    @staticmethod
     def encode_field_str(field_str):
         string_bytes = field_str.encode("ascii")
         base64_bytes = base64.b64encode(string_bytes) 
         return base64_bytes.decode("ascii")
-        
+    
+    @staticmethod
     def decode_field_str(field_str):
         base64_bytes = field_str.encode("ascii") 
         string_bytes = base64.b64decode(base64_bytes) 

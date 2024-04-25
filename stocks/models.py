@@ -26,7 +26,8 @@ class Stock(models.Model):
             'acronym': self.acronym,
             'is_brazilian': self.is_brazilian
         }
-        
+    
+    @staticmethod
     def get_created_or_create(stock_params):
         if stock_params['id_stock'] is not None:
             return Stock.objects.get(id_stock=stock_params['id_stock'])
@@ -62,13 +63,17 @@ class UserStock(models.Model):
         self.max_price = form.data['max_price']
         self.min_price = form.data['min_price']
         if self.update_frequency != form.data['update_frequency']:
+            if not UserStock.objects.filter(stock=self.stock, update_frequency=self.update_frequency, update_date__lt=self.update_date).exists():
+                PriceQuoteHistory.objects.filter(stock=self.stock, update_frequency=self.update_frequency, update_date__lte=self.update_date).delete()
             self.update_date = timezone.now().isoformat()
         self.update_frequency = form.data['update_frequency']
         self.save()
     
+    @staticmethod
     def get_options_to_update_frequency():
         return ['3', '5', '15', '30', '60']
     
+    @staticmethod
     def translate_form_to_model(form):
         user_stock = UserStock()
         user_stock.max_price = form.data['max_price']
@@ -76,6 +81,7 @@ class UserStock(models.Model):
         user_stock.update_frequency = int(form.data['update_frequency'])
         return user_stock
     
+    @staticmethod
     def exists_register(user, stock):
         if UserStock.objects.filter(user=user, stock=stock).exists():
             return True
