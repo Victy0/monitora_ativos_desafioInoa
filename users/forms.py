@@ -60,3 +60,20 @@ class UserForm(forms.ModelForm):
         user_in_db.save()
         
         return None, User.encode_field_str(str(id_user))
+    
+    def validate_to_reset_password(self):
+        email = self.data['email']
+        
+        if email is None:
+            return "E-mail precisa ser preenchido!", None
+        else:
+            email_pattern = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+            if not email_pattern.match(email):
+                return "Padrão de e-mail inválido!", None
+        
+        try:
+            user_db = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return "E-mail não cadastrado!", None
+        
+        return None, user_db

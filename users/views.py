@@ -10,20 +10,39 @@ from .models import User
 
 @is_user_authenticated
 def login(request):
-    if 'id_user' in request.session:
-        return render(request, 'stock/stockList.html')
-    
     if request.method == 'POST':
-        loginForm = UserForm(request.POST)
+        login_form = UserForm(request.POST)
         
-        error_message, id_user = loginForm.validate_login()
+        error_message, id_user = login_form.validate_login()
         if error_message is not None:
-            return render(request, 'login/login.html', {'form': loginForm, 'error': error_message})
+            return render(request, 'login/login.html', {'form': login_form, 'error': error_message})
 
         request.session['id_user'] = id_user
         return redirect('stock-list')
+    
+    data = None
+    if 'email_reset' in request.session:
+        data = {'reset': True}
+        del request.session['email_reset']
+    
+    return render(request, 'login/login.html', data)
+
+@is_user_authenticated
+def password_reset(request):
+    if request.method == 'POST':
+        reset_form = UserForm(request.POST)
         
-    return render(request, 'login/login.html')
+        error_message, user = reset_form.validate_to_reset_password()
+        if error_message is not None:
+            return render(request, 'user/passwordReset.html', {'form': reset_form, 'error': error_message})
+        
+        user.reset_password()
+        
+        request.session['email_reset'] = True
+        
+        return redirect('login')
+    
+    return render(request, 'user/passwordReset.html')
 
 @my_login_required
 def logout(request):
@@ -73,5 +92,6 @@ def edit_user(request):
         return redirect('stock-list')
     else:
         user = User.objects.get(id_user=id_user)
+        user.password = User.decode_field_str(user.password)
         user_form = UserForm(user)
         return render(request, 'user/createUser.html', {'form': user_form, 'edit': True})

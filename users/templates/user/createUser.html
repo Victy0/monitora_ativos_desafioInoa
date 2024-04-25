@@ -50,16 +50,19 @@
             </div>
             <div class="form-group mb-3 form-custom">
                 <label for="password">Senha*:</label>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    class="form-control mt-2"
-                {% if form.data.password != None and not edit%}
-                    value={{ form.data.password }}
-                {% endif %}
-                    required
-                />
+                <div class="input-group">
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="form-control mt-2"
+                    {% if form.data.password != None %}
+                        value={{ form.data.password }}
+                    {% endif %}
+                        required
+                    />
+                    <button class="btn btn-outline-secondary" type="button" id="view-password" onclick="viewPassword()">Visualizar</button>
+                </div>
             </div>
 
         {% if edit %}
@@ -70,12 +73,21 @@
             
             <button type="submit" class="btn btn-primary">Cadastrar</button>
         </form>
-        <a href="{% url 'login' %}" class="btn btn-link">Já possui Cadastro? Acesse sua conta!</a>
+        <div>
+            <div>
+                <a href="{% url 'login' %}" class="btn btn-link">Já possui Cadastro? Acesse sua conta!</a>
+            </div>
+            <div>
+                <a href="{% url 'password-reset' %}" class="btn btn-link">Esqueceu a senha? Recupere aqui!</a>
+            </div>
+        </div>
+        
     {% endif %}
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function(event) { 
+        document.addEventListener("DOMContentLoaded", function(event)
+        { 
             document.getElementById('edit-user-form').addEventListener('submit', function(event)
             {
                 event.preventDefault();
@@ -93,5 +105,19 @@
                 document.getElementById('edit-user-form').submit();
             });
         });
+
+        function viewPassword()
+        {
+            if (document.getElementById('view-password').innerHTML == 'Visualizar')
+            {
+                document.getElementById('password').type = 'text';
+                document.getElementById('view-password').innerHTML = 'Esconder'
+            }
+            else
+            {
+                document.getElementById('password').type = 'password';
+                document.getElementById('view-password').innerHTML = 'Visualizar'
+            }
+        };
     </script>
 {% endblock content %}
