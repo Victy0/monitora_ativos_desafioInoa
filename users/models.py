@@ -1,9 +1,13 @@
 
 import base64
+import random
+import string
 
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+from emails.task import send_email
 
 
 class User(models.Model):
@@ -20,6 +24,15 @@ class User(models.Model):
         
     def __str__(self):
         return self.email
+    
+    def reset_password(self):
+        self.password = ''.join(random.choice(string.ascii_uppercase) for i in range(10))
+        self.save()
+        send_email(
+            "Monitora Ativos - Redefinição de senha",
+            f'Olá, {self.user_name} \n\nsua senha de acesso foi redefinida para: {self.password} ' +
+            f'\n\nRecomendado que seja alterada quando possível.\nOBS: a nova senha é em letras miúsculas, lmebre-se ao tentar realizar login',
+            [self.email])
     
     @staticmethod
     def encode_field_str(field_str):

@@ -1,4 +1,5 @@
 {% extends "base.html" %} 
+{% load static %}
 
 {% block title%} Monitora Ativos - Login {%endblock%}
 
@@ -24,16 +25,64 @@
             </div>
             <div class="form-group mb-3 form-custom">
                 <label for="password">Senha*:</label>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    class="form-control mt-2"
-                    required
-                />
+                <div class="input-group">
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="form-control mt-2"
+                        required
+                    >
+                    <button class="btn btn-outline-secondary" type="button" id="view-password" onclick="viewPassword()">Visualizar</button>
+                </div>
+                
             </div>
             <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
-        <a href="{% url 'create-user' %}" class="btn btn-link">Novo por aqui? Cadastre-se!</a>
-    <div class="col-lg-6">
+        <div>
+            <div>
+                <a href="{% url 'create-user' %}" class="btn btn-link">Novo por aqui? Cadastre-se!</a>
+            </div>
+            <div>
+                <a href="{% url 'password-reset' %}" class="btn btn-link">Esqueceu a senha? Recupere aqui!</a>
+            </div>
+        </div>
+    </div>
+        <script>
+            function viewPassword()
+            {
+                if (document.getElementById('view-password').innerHTML == 'Visualizar')
+                {
+                    document.getElementById('password').type = 'text';
+                    document.getElementById('view-password').innerHTML = 'Esconder'
+                }
+                else
+                {
+                    document.getElementById('password').type = 'password';
+                    document.getElementById('view-password').innerHTML = 'Visualizar'
+                }
+            };
+        </script>
+    {% if reset %}
+        <script>
+            function showModal()
+            {
+                document.getElementById('modal-text-body').innerHTML = 'Senha redefinida e nova senha enviada por e-mail!';
+                document.getElementById('modal-title').innerHTML = 'Redefinição de senha';
+                document.getElementById('submit-confirm').innerHTML = 'Fechar';
+                document.getElementById('close-modal').style.display = 'none';
+                document.getElementById('modal-confirm').style.display = 'flex';
+            }
+
+            document.addEventListener("DOMContentLoaded", function(event)
+            {    
+                showModal();
+
+                document.getElementById('submit-confirm').addEventListener('click', function()
+                {
+                    document.getElementById('modal-confirm').style.display = 'none';
+                });
+            });
+        </script>
+    {% endif %}
 {% endblock content %}

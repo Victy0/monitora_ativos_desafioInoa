@@ -1,0 +1,14 @@
+{% extends "base.html" %} 
+
+{% block title%} Monitora Ativos - Página não encontrada {%endblock%}
+
+{% block content %}
+    <div class="col-lg-6">
+        <h1 class="mb-2">404</h1>
+        <p class="fs-3"> <span class="text-danger">Epa!</span> Página não encontrada</p>
+        <p class="lead">
+            A página que você está tentando acesar não existe, que tal tentar outra!
+        </p>
+        <a href="{% url 'login' %}" class="btn btn-danger">Retornar para página principal</a>
+    </div>
+{% endblock content %}
