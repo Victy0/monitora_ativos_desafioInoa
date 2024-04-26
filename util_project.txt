@@ -2,6 +2,10 @@
 pip install django
 pip install requests
 pip install apscheduler
+pip instal whitenoise
+
+#atualizar requirements.txt
+pip freeze > requirements.txt  
 
 #permitir execução de Scripts no Windows (abrir PowerShell em modo administrador)
 Type Set-ExecutionPolicy RemoteSigned
@@ -16,7 +20,12 @@ python manage.py migrate
 env/Scripts/activate
 
 #iniciar server
-python manage.py runserver 8000
+python manage.py runserver
 
 #desativar venv
 deactivate
+
+#caso queira rodar em produção
+1 - alterar valor em setting.py de DEBUG para False
+2 - executar comando: py manage.py collectstatic
+3 - iniciar server normalmente

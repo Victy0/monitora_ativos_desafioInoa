@@ -1,0 +1,14 @@
+{% extends "base.html" %} 
+
+{% block title%} Monitora Ativos - Erro inesperado {%endblock%}
+
+{% block content %}
+    <div class="col-lg-6">
+        <h1 class="mb-2">505</h1>
+        <p class="fs-3"> <span class="text-danger">Epa!</span> Erro inesperado</p>
+        <p class="lead">
+            Peço desculpas, mas ocorreu um erro inesperado. Espero que não ocorra mais!
+        </p>
+        <a href="{% url 'login' %}" class="btn btn-danger">Retornar para página principal</a>
+    </div>
+{% endblock content %}
