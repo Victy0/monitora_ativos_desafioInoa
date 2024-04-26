@@ -5,7 +5,10 @@ from stocks.forms import StockForm, UserStockForm
 from stocks.models import PriceQuoteHistory, Stock, UserStock
 from users.models import User
 
-
+#
+# função para interface de listagem de ativos
+## parâmetros: request
+#
 @my_login_required
 def stock_list(request):
     id_user = int(User.decode_field_str(request.session['id_user']))
@@ -13,6 +16,10 @@ def stock_list(request):
     
     return render(request, 'stock/stockList.html', {'stockList': stock_list})
 
+#
+# função para interface de criação de ativos
+## parâmetros: request
+#
 @my_login_required
 def create_stock(request):
     if request.method == 'POST':
@@ -53,6 +60,10 @@ def create_stock(request):
         stock_form = StockForm()
         return render(request, 'stock/createStock.html', {'form': stock_form, 'new': True})
 
+#
+# função para recuperar informações de ativo na fonte pública
+## parâmetros: request
+#
 @my_login_required
 def search_stock(request):
     stock_form = StockForm(request.POST)
@@ -68,6 +79,10 @@ def search_stock(request):
     user_stock_form = StockForm(request.POST)
     return render(request, 'stock/createStock.html', {'stock': stock, 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency()})
 
+#
+# função para interface de edição de ativo
+## parâmetros: request, id do ativo
+#
 @my_login_required
 def edit_stock(request, id_stock):
     id_user = int(User.decode_field_str(request.session['id_user']))
@@ -86,7 +101,7 @@ def edit_stock(request, id_stock):
             return render(request,
                         'stock/createStock.html',
                         {'stock': stock, 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency(), 'id_stock': id_stock ,'error': error_message})
-            
+        
         user_stock.update_register(user_stock_form)
         
         del request.session['current_price']
@@ -98,7 +113,11 @@ def edit_stock(request, id_stock):
         request.session['current_price'] = current_price
         
         return render(request, 'stock/createStock.html', {'stock': stock, 'form': user_stock_form, 'options_update': UserStock.get_options_to_update_frequency(), 'id_stock': id_stock})
-    
+
+#
+# função para exclusão de ativos
+## parâmetros: request, id do ativo
+#
 @my_login_required
 def delete_stock(request, id_stock):    
     id_user = int(User.decode_field_str(request.session['id_user']))
@@ -109,6 +128,10 @@ def delete_stock(request, id_stock):
 
     return redirect('stock-list')
 
+#
+# função para interface de listagem de monitoramento de ativos (histórico de cotação)
+## parâmetros: request, id do ativo, peridiocidade
+#
 @my_login_required
 def price_quote_history(request, id_stock, frequency):
     id_user = int(User.decode_field_str(request.session['id_user']))

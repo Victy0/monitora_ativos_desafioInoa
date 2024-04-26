@@ -5,13 +5,19 @@ from django.utils import timezone
 
 from .models import User
 
-
+#
+# Estrutura de form para usuário
+#
 class UserForm(forms.ModelForm):
     
     class Meta:
         model = User
         fields = ('user_name','email','password')
     
+    #
+    # função para validar dados de usuário antes de salvar no banco de dados
+    ## parâmetros: instância do form, indicador se irá editar o registro de usuário
+    #
     def validate_fields(self, is_edition):
         user_name = self.data['user_name']
         email = self.data['email']
@@ -34,6 +40,10 @@ class UserForm(forms.ModelForm):
         
         return None
     
+    #
+    # função para validar dados de usuário tentado realizar login
+    ## parâmetros: instância do form
+    #
     def validate_login(self):
         id_user = None
         email = self.data['email']
@@ -61,6 +71,10 @@ class UserForm(forms.ModelForm):
         
         return None, User.encode_field_str(str(id_user))
     
+    #
+    # função para validar dados de usuário antes de redefinir senha
+    ## parâmetros: instância do form
+    #
     def validate_to_reset_password(self):
         email = self.data['email']
         

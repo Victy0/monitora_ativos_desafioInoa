@@ -6,6 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from users.models import User
 
 
+#
+# Model de ativo
+#
 class Stock(models.Model):
     id_stock = models.AutoField(_("identificador do registro de ativo"), primary_key=True)
     name = models.CharField(_("nome do ativo"), max_length=50)
@@ -19,6 +22,10 @@ class Stock(models.Model):
     def __str__(self):
         return self.name + '(' + self.acronym + ')'
     
+    #
+    # função para serializar o model em um json com dados necessários para interface de criação de ativo vinculado ao usuário
+    ## parâmetros: registro de ativo
+    #
     def serialize_stock_for_create(self):
         return {
             'id_stock': self.id_stock,
@@ -27,6 +34,10 @@ class Stock(models.Model):
             'is_brazilian': self.is_brazilian
         }
     
+    #
+    # função para reucupera ativo criado no banco de dados ou criar um novo registro e retornar ele
+    ## parâmetros: form de ativo
+    #
     @staticmethod
     def get_created_or_create(stock_params):
         if stock_params['id_stock'] is not None:
@@ -39,7 +50,10 @@ class Stock(models.Model):
         stock.save()
         
         return stock
-    
+
+#
+# Model de ativo vinculado ao usuário
+#
 class UserStock(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True)
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE, db_index=True)
@@ -59,9 +73,14 @@ class UserStock(models.Model):
     def __str__(self):
         return '(Usuário: ' + str(self.user.email) + '; Ativo: ' + str(self.stock.acronym) + ')'
     
+    #
+    # função para atualizar registro no banco de dados
+    ## parâmetros: instância do model, form de ativo vinculado ao usuário
+    #
     def update_register(self, form):
         self.max_price = form.data['max_price']
         self.min_price = form.data['min_price']
+        # caso seja alterado o valor de periodicidade avalia se deve deletar histórico de cotação do banco de dados
         if self.update_frequency != form.data['update_frequency']:
             if not UserStock.objects.filter(stock=self.stock, update_frequency=self.update_frequency, update_date__lt=self.update_date).exists():
                 PriceQuoteHistory.objects.filter(stock=self.stock, update_frequency=self.update_frequency, update_date__lte=self.update_date).delete()
@@ -69,10 +88,17 @@ class UserStock(models.Model):
         self.update_frequency = form.data['update_frequency']
         self.save()
     
+    #
+    # função para recuperar possíveis opções de periodicidade
+    #
     @staticmethod
     def get_options_to_update_frequency():
         return ['3', '5', '15', '30', '60']
     
+    #
+    # função para criar um model a partir de um form de ativo vinculado ao usuário
+    ## parâmetros: form de ativo vinculado ao usuário
+    #
     @staticmethod
     def translate_form_to_model(form):
         user_stock = UserStock()
@@ -81,12 +107,19 @@ class UserStock(models.Model):
         user_stock.update_frequency = int(form.data['update_frequency'])
         return user_stock
     
+    #
+    # função para verificar se existe registro de ativo vinculado ao usuário no banco de dados
+    ## parâmetros: registro de usuário, registro de ativo
+    #
     @staticmethod
     def exists_register(user, stock):
         if UserStock.objects.filter(user=user, stock=stock).exists():
             return True
         return False
-    
+
+#
+# Model de histórico de cotação
+#
 class PriceQuoteHistory(models.Model):
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
     price_quote = models.DecimalField(_("preço da cotação no momento da monitorização"), max_digits=10, decimal_places=2, default=0)
