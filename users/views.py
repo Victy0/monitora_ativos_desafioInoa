@@ -8,6 +8,10 @@ from .forms import UserForm
 from .models import User
 
 
+#
+# função para interface de login
+## parâmetros: request
+#
 @is_user_authenticated
 def login(request):
     if request.method == 'POST':
@@ -16,10 +20,11 @@ def login(request):
         error_message, id_user = login_form.validate_login()
         if error_message is not None:
             return render(request, 'login/login.html', {'form': login_form, 'error': error_message})
-
+        
         request.session['id_user'] = id_user
         return redirect('stock-list')
     
+    # configuração para mostrar modal de redefinição de senha
     data = None
     if 'email_reset' in request.session:
         data = {'reset': True}
@@ -27,6 +32,10 @@ def login(request):
     
     return render(request, 'login/login.html', data)
 
+#
+# função para interface de redefinição de senha
+## parâmetros: request
+#
 @is_user_authenticated
 def password_reset(request):
     if request.method == 'POST':
@@ -44,12 +53,20 @@ def password_reset(request):
     
     return render(request, 'user/passwordReset.html')
 
+#
+# função para realizar logout
+## parâmetros: request
+#
 @my_login_required
 def logout(request):
     if 'id_user' in request.session:
         del request.session['id_user']
     return redirect('login')
 
+#
+# função para interface de criação de usário e atualização de dados de usuário no banco de dados
+## parâmetros: request
+#
 @is_user_authenticated
 def create_user(request):
     if request.method == 'POST':
@@ -73,6 +90,10 @@ def create_user(request):
         user_form = UserForm()
         return render(request, 'user/createUser.html', {'form': user_form})
 
+#
+# função para interface de edição de usuário
+## parâmetros: request
+#
 @my_login_required
 def edit_user(request):
     id_user_str = request.session['id_user']
