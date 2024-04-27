@@ -93,6 +93,8 @@ O projeto se econtra dividido em 7 principais diretórios:
         |____css
         |____images
 
+    |____stocks
+
     |____tasksheculer
 
     |____templates
