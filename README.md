@@ -85,7 +85,7 @@ O projeto se econtra dividido em 7 principais diretórios:
 
 :small_blue_diamond: **static**: diretório com arquivos estáticos de estilização (css) e imagens, que podem ser utilizados pelos apps.
 
-    |____emais
+    |____emails
 
     |____monitoraAtivos
 
@@ -98,5 +98,5 @@ O projeto se econtra dividido em 7 principais diretórios:
     |____tasksheculer
 
     |____templates
-    
+
     |____users
